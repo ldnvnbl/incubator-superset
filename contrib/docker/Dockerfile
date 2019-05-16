@@ -38,8 +38,8 @@ RUN apt-get install -y vim less postgresql-client redis-tools
 # Install nodejs for custom build
 # https://superset.incubator.apache.org/installation.html#making-your-own-build
 # https://nodejs.org/en/download/package-manager/
-RUN curl -sL https://deb.nodesource.com/setup_10.x | bash - \
-    && apt-get install -y nodejs
+RUN curl -sL https://deb.nodesource.com/setup_10.x | bash - 
+RUN apt-get update -y && apt-get install -y nodejs
 
 WORKDIR /home/superset
 
@@ -48,7 +48,10 @@ COPY requirements-dev.txt .
 
 RUN pip install --upgrade setuptools pip \
     && pip install -r requirements.txt -r requirements-dev.txt \
+    && pip install gevent \
     && rm -rf /root/.cache/pip
+
+RUN apt install python-gevent -y
 
 COPY --chown=superset:superset superset superset
 
